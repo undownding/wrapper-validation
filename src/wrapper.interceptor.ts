@@ -15,8 +15,12 @@ export class WrapperInterceptor implements NestInterceptor {
   ): Observable<any> | Promise<Observable<any>> {
     return next.handle().pipe(
       map((data: unknown): any => {
-        // 如果数据是对象且已经包含 data 属性，则认为已经自行包装
-        if (data && typeof data === 'object' && data['data']) {
+        // 如果数据是对象且已经包含 data 或 error 属性，则认为已经自行包装
+        if (
+          data &&
+          typeof data === 'object' &&
+          (data['data'] || data['error'])
+        ) {
           return data;
         }
 

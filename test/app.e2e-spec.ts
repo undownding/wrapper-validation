@@ -59,10 +59,28 @@ describe('AppController (e2e)', () => {
   });
 
   it('/401 (GET) - should handle UnauthorizedException', () => {
-    return request(app.getHttpServer()).get('/401').expect(401);
+    return request(app.getHttpServer())
+      .get('/401')
+      .expect(401)
+      .expect((res) => {
+        expect(res.body).toEqual({
+          statusCode: 401,
+          message: 'error message',
+          error: 'Unauthorized',
+        });
+      });
   });
 
   it('/500 (GET) - should handle internal server error', () => {
-    return request(app.getHttpServer()).get('/500').expect(500);
+    return request(app.getHttpServer())
+      .get('/500')
+      .expect(500)
+      .expect((res) => {
+        expect(res.body).toEqual({
+          statusCode: 500,
+          message: 'error message',
+          error: 'Internal Server Error',
+        });
+      });
   });
 });
